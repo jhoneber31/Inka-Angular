@@ -1,0 +1,11 @@
+<div class="flex flex-col lg:flex-row items-center">
+  <img [src]="product?.producto?.imagen" alt="image-product" width="250">
+	<div class="lg:flex-1 flex flex-col gap-y-2 lg:gap-x-2">
+		<p class="font-bold">Nombre: <span class="font-normal">{{product?.producto?.nombre}}</span></p>
+		<p class="font-bold">Cantidad: <span class="font-normal">{{product?.cantidad}} unidades</span></p>
+		<p class="font-bold">Motivo: <span class="font-normal">{{product?.producto?.nombre}}</span></p>
+		<p *ngIf="product?.provedor" class="font-bold">Proveedor: <span class="font-normal">{{product?.provedor?.nombre}}</span></p>
+		<p class="font-bold">Responsable: <span class="font-normal">{{product?.usuario?.perfilUsuario?.nombres}} {{product?.usuario?.perfilUsuario?.apellidos}}</span></p>
+		<p class="font-bold">Fecha de movimiento: <span class="font-normal">{{product?.fecha}}</span></p>
+	</div>
+</div>

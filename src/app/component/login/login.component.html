@@ -1,0 +1,40 @@
+<app-loader *ngIf="loading; else:loginPage"></app-loader>
+<ng-template #loginPage>
+  <main class="h-[100vh] bg-login bg-center bg-no-repeat bg-cover">
+    <div class="container h-[100%] w-full flex items-center justify-center">
+      <form #f1="ngForm" novalidate (ngSubmit)="iniciarSesion(f1.value, f1.valid)" class="p-4 rounded-lg shadow-lg flex flex-col items-center bg-white opacity-100 lg:w-4/12">
+        <div class="py-4 w-full flex justify-center border-b-2 border-dotted">
+          <img src="/assets/img/inka-logo.png" width="125" height="55" alt=""/>
+        </div>
+        <h1 class="text-[#6D6D6D] py-4 lg:text-[18px]">¡Bienvenido!</h1>
+          <div class="pb-4 relative w-full">
+            <input 
+              type="email" 
+              id="floatingInput" 
+              name="correo" 
+              [ngModel]="login.correo"
+              required  
+              #correo="ngModel" 
+              pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$" 
+              placeholder="Usuario" 
+              class="w-full p-2 border-2 rounded-lg border-[#6D6D6D] text-[#6D6D6D] shadow-md focus:outline-0 focus:border-[#31241E]"
+            >
+            <small for="floatingInput" [hidden]="correo.valid || (correo.pristine && !f1.submitted)" class="text-red-500 absolute bottom-1 left-0 text-[12px]">
+              Ingresar Email: <i>admin@ejemplo.com</i>.
+            </small>
+            </div>
+          <div class="pb-4 relative w-full">
+            <input type="password" name="password" id="floatingPassword" [ngModel]="login.password"
+            required validateEqual="confirmPassword" reverse="true" #password="ngModel" placeholder="Contraseña" class="w-full p-2 border-2 rounded-lg border-[#6D6D6D] text-[#6D6D6D] shadow-md focus:outline-0 focus:border-[#31241E]">
+            <small for="floatingPassword" [hidden]="password.valid || (password.pristine && !f1.submitted)" class="text-red-500 absolute bottom-1 left-0 text-[12px]">
+              Ingresar Contraseña
+            </small>
+          </div>
+          <button class="w-full bg-[#31241e] text-white rounded-lg py-2 px-2 mt-1" type="submit">INGRESAR</button>
+          <div *ngIf="alerta==true" class="text-[12px] text-red-500 mt-2" role="alert">
+            Credenciales incorrectas
+          </div>
+      </form>
+    </div>
+  </main>
+</ng-template>

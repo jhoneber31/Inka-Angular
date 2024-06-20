@@ -1,0 +1,103 @@
+<form [formGroup]="form" (ngSubmit)="submitProduct()" *ngIf="!message; else:alertMessage" class="lg:w-[700px]">
+  <div class="flex flex-col lg:flex-row lg:gap-x-6">
+    <div class="flex-1 lg:w-[50%]">
+      <div class="flex flex-col pb-3 relative">
+        <label for="name" class="text-[14px]" [ngClass]="{'text-red-500':form.get('name')?.hasError('required') && form.get('name')?.touched}">Nombre: </label>
+        <input 
+          type="text" 
+          class="p-2 border-2 rounded-lg border-[#6D6D6D] text-[#6D6D6D] shadow-md focus:outline-0 focus:border-[#31241E]" 
+          name="name"
+          formControlName="name"
+          [ngClass]="{'border-red-500':form.get('name')?.hasError('required') && form.get('name')?.touched}"
+        >
+        <span *ngIf="form.get('name')?.hasError('required') && form.get('name')?.touched" class="text-[12px] absolute bottom-0 text-red-500">
+          El nombre es requerido.
+        </span>
+      </div>
+      <div class="flex flex-col pb-3 relative">
+        <label for="dimension" class="text-[14px]" [ngClass]="{'text-red-500':form.get('dimension')?.hasError('required') && form.get('dimension')?.touched}">Medida: </label>
+        <input 
+          type="text" 
+          class="p-2 border-2 rounded-lg border-[#6D6D6D] text-[#6D6D6D] shadow-md focus:outline-0 focus:border-[#31241E]" 
+          name="dimension"
+          formControlName="dimension"
+          [ngClass]="{'border-red-500':form.get('dimension')?.hasError('required') && form.get('dimension')?.touched}"
+        >
+        <span *ngIf="form.get('dimension')?.hasError('required') && form.get('dimension')?.touched" class="text-[12px] absolute bottom-0 text-red-500">
+          La dimension es requerida.
+        </span>
+      </div>
+      <div class="flex flex-col pb-3 relative">
+        <label for="type" class="text-[14px]" [ngClass]="{'text-red-500':form.get('type')?.hasError('required') && form.get('type')?.touched}">Tipo: </label>
+        <select 
+          name="type" 
+          formControlName="type"
+          class="p-2 border-2 rounded-lg border-[#6D6D6D] text-[#6D6D6D] shadow-md focus:outline-0 focus:border-[#31241E]" 
+          [ngClass]="{'border-red-500':form.get('type')?.hasError('required') && form.get('type')?.touched}"
+        >
+          <option value="">Selecciona un tipo de producto</option>
+          <option [value]="type.id" *ngFor="let type of typeSeal">
+            {{type.name}}
+          </option>
+        </select>
+        <span *ngIf="form.get('type')?.hasError('required') && form.get('type')?.touched" class="text-[12px] absolute bottom-0 text-red-500">
+          El tipo es requerido.
+        </span>
+      </div>
+      <div class="flex flex-col pb-3 relative">
+        <label for="category" class="text-[14px]" [ngClass]="{'text-red-500':form.get('category')?.hasError('required') && form.get('category')?.touched}">Categoria: </label>
+        <select 
+          name="category"
+          class="p-2 border-2 rounded-lg border-[#6D6D6D] text-[#6D6D6D] shadow-md focus:outline-0 focus:border-[#31241E]" 
+          formControlName="category"
+          [ngClass]="{'border-red-500':form.get('category')?.hasError('required') && form.get('category')?.touched}"
+        >
+          <option value="">Selecciona una categoria</option>
+          <option [value]="category.id" *ngFor="let category of categorySeal">
+            {{category.name}}
+          </option>
+        </select>
+        <span *ngIf="form.get('category')?.hasError('required') && form.get('category')?.touched" class="text-[12px] absolute bottom-0 text-red-500">
+          La categoria es requerida.
+        </span>
+      </div>
+      <div class="flex flex-col pb-3 relative">
+        <label for="unitPrice" class="text-[14px]" [ngClass]="{'text-red-500':(form.get('unitPrice')?.hasError('required') || form.get('unitPrice')?.hasError('min') || form.get('unitPrice')?.hasError('pattern')) && form.get('unitPrice')?.touched}">Precio Unitario: </label>
+        <input 
+          type="text" 
+          class="p-2 border-2 rounded-lg border-[#6D6D6D] text-[#6D6D6D] shadow-md focus:outline-0 focus:border-[#31241E]" 
+          name="unitPrice"
+          formControlName="unitPrice"
+          [ngClass]="{'border-red-500':(form.get('unitPrice')?.hasError('required') || form.get('unitPrice')?.hasError('min') || form.get('unitPrice')?.hasError('pattern')) && form.get('unitPrice')?.touched}"
+        >
+        <div *ngIf="form.get('unitPrice')?.touched" class="text-[12px] absolute bottom-0 text-red-500">
+          <span *ngIf="form.get('unitPrice')?.hasError('required')">El precio es requerido.</span>
+          <span *ngIf="form.get('unitPrice')?.hasError('pattern')">Número no válido.</span>
+          <span *ngIf="form.get('unitPrice')?.hasError('min')">El número tiene que ser mayor que 0.</span>
+        </div>
+      </div>
+    </div>
+    <div class="flex-1 lg:w-[50%]">
+      <div class="flex flex-col pb-3 relative">
+        <label for="" class="text-[14px]">Imagen:</label>
+        <div class="p-2 border-2 rounded-lg border-[#6D6D6D] text-[#6D6D6D] shadow-md focus:outline-0 focus:border-[#31241E] h-[130px] lg:h-[200px] relative flex items-center justify-center">
+          <img [src]="selectedFile" *ngIf="selectedFile; else: noImage" alt="img-preview" width="100" class="object-contain max-h-[100%] max-w-[100%]">
+          <label for="dropzone-file" class="w-full h-full flex items-center justify-center absolute left-0 top-0 z-50">
+            <ng-template #noImage>
+              <span class="text-[18px] text-black font-bold">SIN IMAGEN</span>
+            </ng-template>
+            <input name="image" id="dropzone-file" type="file" class="hidden w-full h-full"  (change)="onFileChange($event)"/>
+          </label>
+        </div>
+      </div>
+      <div class="flex gap-x-6 justify-between mt-2 relative lg:top-[100]">
+        <button type="submit" [disabled]="form.invalid" class="w-full disabled:opacity-75 p-2 bg-[#31241e] text-white rounded-lg flex-1">{{buttonText}}</button>
+      </div>
+    </div>
+  </div>
+</form>
+<ng-template #alertMessage>
+  <h3 class="text-center font-bold text-[18px] my-2">
+    {{message}}
+  </h3>
+</ng-template>

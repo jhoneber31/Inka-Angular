@@ -1,0 +1,67 @@
+<app-loader *ngIf="loading; else:historyPage"></app-loader>
+<ng-template #historyPage>
+  <section class="section-home">
+    <div class="container mx-auto py-6 md:px-12 flex flex-col lg:flex-row lg:gap-x-6 h-full">
+      <div class="flex-1 lg:max-w-[60%] lg:pr-10 lg:border-r-2 lg:border-black">
+        <div class="mb-6">
+          <h3 class="font-semibold text-[18px] mb-4">Filtrar por fecha</h3>
+          <mat-form-field>
+            <mat-label>Ingrese un rango de fechas</mat-label>
+            <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+              <input matStartDate formControlName="start" placeholder="Desde">
+              <input matEndDate formControlName="end" placeholder="Hasta">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field>
+        </div>
+        <app-page-not-found *ngIf="error; else:historyTemplate"></app-page-not-found>
+      </div>
+      <div class="hidden lg:block lg:pl-10">
+        <h3 class="text-[18px] font-semibold">PROVEEDORES</h3>
+        <div class="flex flex-col gap-y-4 mt-4">
+          <div *ngFor="let provider of providers">
+            <span class="block font-semibold">{{provider.name}}</span>
+            <span class="block">RUC: {{provider.ruc}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <ng-template #historyTemplate>
+    <div class="grid grid-cols-1 gap-4">
+      <div *ngFor="let his of history" class="z-[10] relative col-span-1 px-2 py-3 border-b-2 border-[#666666] gap-x-6 flex items-center">
+        <div class="flex-shrink-0 flex items-center">
+          <img [src]="his.tipo.id === 2 ? '/assets/img/exit-icon.svg' :'/assets/img/entry-icon.svg'" alt="icon-movement" class="cursor-pointer" (click)="showInfoHistory(his)">
+        </div>
+        <div class="flex-grow flex flex-col sm:flex-row gap-x-10 xl:gap-x-20">
+          <div class="flex-grow">
+            <span class="font-bold block">{{his.tipo.nombre}} de {{his.producto?.nombre}}</span>
+            <span class="block">Cantidad: {{his.cantidad}} unidades</span>
+          </div>
+          <div class="flex-grow">
+            <span class="block">Fecha: {{his.fecha}}</span>
+            <span class="block">Responsable: {{his.usuario?.perfilUsuario?.nombres}} {{his.usuario?.perfilUsuario?.apellidos}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-6 w-full flex justify-center">
+      <ul class="flex w-fit rounded-lg border-2 cursor-pointer items-center">
+        <li class="py-2.5 px-2 border-r-2" (click)="setPage(getPage() - 1)"><img src="/assets/img/arrow-prev.svg" width="30" alt="arrow-prev"></li>
+        <li 
+          *ngFor="let numberPage of [].constructor(totalPages); let i = index" 
+          class="flex items-center px-3 text-[16px] h-full"
+          [ngClass]="{'border-r-2': i < totalPages-1, 'bg-[#DED9D9]': i === getPage()}"
+          (click)="setPage(i)"
+        >
+          {{i+1}}
+        </li>
+        <li class="py-2.5 px-2 border-l-2" (click)="setPage(getPage() + 1)"><img src="/assets/img/arrow-next.svg" width="30" alt="arrow-next"></li>
+      </ul>
+    </div>
+  </ng-template>
+  <app-modal *ngIf="showModal" (closeModal)="closeModal()" [title]="title">
+    <app-history-information [product]="historySelected"></app-history-information>
+  </app-modal>
+</ng-template>

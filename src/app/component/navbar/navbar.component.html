@@ -1,0 +1,12 @@
+<nav class="fixed top-0 left-0 w-full bg-white/30 backdrop-blur-md z-50 lg:left-[16rem] lg:w-[calc(100%-16rem)]">
+  <div class="container mx-auto py-3 max-h-[71px] flex items-center justify-between md:px-12">
+    <div class="flex gap-x-2 items-center">
+      <img src="/assets/img/menu-hambuger.svg" alt="burger-icon" width="40" class="lg:hidden" (click)="toggleSidebar()" >
+      <span class="text-[24px] font-bold">{{currentRoute}}</span>
+    </div>
+    <div class="p-2 flex items-center gap-x-2 menu-button">
+      <span class="text-[18px] font-semibold">{{user}}</span>
+      <img src="/assets/img/user-icon.svg" width="25" alt="user-icon">
+    </div>
+  </div>
+</nav>

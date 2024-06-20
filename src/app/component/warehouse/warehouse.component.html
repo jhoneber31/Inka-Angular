@@ -1,0 +1,61 @@
+<app-loader *ngIf="loading; else:warehouse"></app-loader>
+<ng-template #warehouse>
+  <section class="section-home">
+    <div class="container mx-auto py-6 md:px-12 h-full">
+      <div class="flex justify-between items-center">
+        <div class="relative w-10/12 lg:w-8/12 xl:w-9/12">
+          <input type="text" class="rounded-lg w-full py-2 px-3 bg-[#DED9D9] placeholder:text-[#7a7a7a] border-2 border-transparent  focus:outline-none focus:border-2 focus:border-[#7a7a7a] focus:ring-0" placeholder="Buscar producto" (keyup.enter)="searchProducts($event)">
+          <img src="/assets/img/search-icon.svg" width="20" alt="search-icon" class="absolute top-2 right-2">
+        </div>
+        <img src="/assets/img/plus-circle-icon.svg" width="45" alt="plus-circle" class="cursor-pointer lg:hidden" (click)="openModal('newProduct')">
+        <button class="hidden lg:flex text-white py-2 px-3 rounded-lg bg-[#7D6F6F] items-center gap-x-2 overflow-hidden text-ellipsis whitespace-nowrap lg:max-w-[200px] xl:max-w-none" (click)="openModal('newProduct')">
+          <img src="/assets/img/plus-icon.svg" width="25" alt="plus-icon">
+          <span class="font-semibold text-[16px] block truncate">AGREGAR PRODUCTO</span>
+        </button>
+      </div>
+      <div class="grid sm:grid-cols-2 grid-cols-3 gap-4 mt-10 xl:grid-cols-3">
+        <div *ngFor="let product of products" class="col-span-3 px-2 py-3 rounded-lg shadow-sm border-2 border-[#666666] flex sm:col-span-1 relative">
+          <div class="w-[120px] h-[134px] flex items-center justify-center">
+            <img [src]="product.imagen" alt="Product Image" class="w-[100%] h-[100%] object-cover">
+          </div>
+          <div class="ml-2 grow overflow-hidden text-ellipsis whitespace-nowrap">
+            <h3 class="truncate text-[#FF7000] font-bold xl:text-[18px]">{{product.nombre}}</h3>
+            <div class="flex flex-col gap-y-1 grow text-[14px] mt-1 xl:text-[16px]">
+              <span class="block truncate"><strong>Tipo: </strong> {{product.tipoProducto.nombre}}</span>
+              <span class="block truncate"><strong>Diseño: </strong> {{product.categoriaProductos.nombre}}</span>
+              <span class="block truncate"><strong>Precio Unit.: </strong> {{product.precio}}</span>
+              <span class="block truncate"><strong>Cantidad: </strong> {{product.stock}}</span>
+            </div>
+          </div>
+          <div class="flex flex-col justify-between  gap-y-4">
+            <img src="/assets/img/movement-icon.svg" width="30" alt="movement-icon" class="cursor-pointer" (click)="registerMovement(product)">
+            <img src="/assets/img/edit-icon.svg" width="30" alt="edit" class="cursor-pointer" (click)="editProduct(product)">
+            <img src="/assets/img/delete-icon.svg" width="30" alt="delete-icon" class="cursor-pointer">
+          </div>
+        </div>
+      </div>
+      <div class="mt-6 w-full flex justify-center">
+        <ul class="flex w-fit rounded-lg border-2 cursor-pointer items-center">
+          <li class="py-2.5 px-2 border-r-2" (click)="setPage(getPage() - 1)"><img src="/assets/img/arrow-prev.svg" width="30" alt="arrow-prev"></li>
+          <li 
+            *ngFor="let numberPage of [].constructor(totalPages); let i = index" 
+            class="flex items-center px-3 text-[16px] h-full"
+            [ngClass]="{'border-r-2': i < totalPages-1, 'bg-[#DED9D9]': i === getPage()}"
+            (click)="setPage(i)"
+          >
+            {{i+1}}
+          </li>
+          <li class="py-2.5 px-2 border-l-2" (click)="setPage(getPage() + 1)"><img src="/assets/img/arrow-next.svg" width="30" alt="arrow-next"></li>
+        </ul>
+      </div>
+    </div>
+    <app-modal *ngIf="showModal" [title]="title" (closeModal)="closeModal()">
+      <ng-container [ngSwitch]="modalContent">
+        <app-product-layout *ngSwitchCase="'newProduct'"></app-product-layout>
+        <app-choose-action *ngSwitchCase="'product-options'" [product]="selectedProduct" (edit)="editProduct($event)" (register)="registerMovement($event)"></app-choose-action>
+        <app-product-layout *ngSwitchCase="'edit-product'" [product]="selectedProduct"></app-product-layout>
+        <app-movement-type *ngSwitchCase="'register-movement'" [product]="selectedProduct" (title)="updateTitle($event)" ></app-movement-type>
+      </ng-container>
+    </app-modal>
+  </section>
+</ng-template>

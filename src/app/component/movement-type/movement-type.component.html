@@ -1,0 +1,95 @@
+<form [formGroup]="form" (ngSubmit)="handleSubmit()" class="flex flex-col gap-y-3 lg:w-[350px]" *ngIf="!message;else:alertMessage">
+  <div class="flex justify-center">
+    <img [src]="product?.imagen" width="140" alt="image-product">
+  </div>
+  <div class="flex justify-between items-center">
+    <label for="code" class="text-[14px] md:text-[18px] font-semibold">Movimiento:</label>
+    <select name="typeMovement" class="ml-2 border-2 border-[#6D6D6D] px-1 rounded-md py-1 lg:w-[160px]" (click)="selectMovementType($event)">
+      <option value="1">Ingresar producto</option>
+      <option value="2">Retirar producto</option>
+    </select>
+  </div>
+  <div class="flex justify-between">
+    <label for="code" class="text-[14px] md:text-[18px] font-semibold">Código:</label>
+    <span>{{product?.id}}</span>
+  </div>
+  <div class="flex justify-between">
+    <label for="name" class="text-[14px] md:text-[18px] font-semibold">Nombre:</label>
+    <span>{{product?.nombre}}</span>
+  </div>
+  <div class="flex justify-between">
+    <label for="type" class="text-[14px] md:text-[18px] font-semibold">Tipo:</label>
+    <span>{{product?.tipoProducto?.nombre}}</span>
+  </div>
+  <div class="flex pb-3 justify-between items-center relative">
+    <label 
+      for="quantity" 
+      class="text-[14px] md:text-[18px] font-semibold" 
+      [ngClass]="{'text-red-500':(form.get('quantity')?.hasError('required') || form.get('quantity')?.hasError('pattern') || form.get('quantity')?.hasError('min')) && form.get('quantity')?.touched}"
+    >
+      Cantidad: 
+    </label>
+    <input 
+      type="text" 
+      class="py-1 px-2 border-2 rounded-lg border-[#6D6D6D] text-[#6D6D6D] shadow-md focus:outline-0 focus:border-[#31241E] max-w-[160px]" 
+      name="quantity"
+      autocomplete="off"
+      formControlName="quantity"
+      [ngClass]="{'border-red-500':(form.get('quantity')?.hasError('required') || form.get('quantity')?.hasError('pattern') || form.get('quantity')?.hasError('min')) && form.get('quantity')?.touched}"
+    >
+    <div *ngIf="form.get('quantity')?.touched" class="text-[12px] absolute bottom-0 text-red-500">
+      <span *ngIf="form.get('quantity')?.hasError('required')">La cantidad es requerido.</span>
+      <span *ngIf="form.get('quantity')?.hasError('pattern')">Cantidad no válida.</span>
+      <span *ngIf="form.get('quantity')?.hasError('min')">La cantidad tiene que ser mayor que 0.</span>
+    </div>
+  </div>
+  <div class="flex justify-between items-center pb-3 relative" [ngClass]="{'hidden': typeMovement !== 1}">
+    <label 
+      for="provider" 
+      class="text-[14px] md:text-[18px] font-semibold"
+      [ngClass]="{'text-red-500':form.get('provider')?.hasError('required') && form.get('provider')?.touched}"
+    >
+      Proveedor:
+    </label>
+    <select 
+      name="provider" 
+      formControlName="provider"
+      class="ml-2 border-2 border-[#6D6D6D] px-1 rounded-md py-1 max-w-[160px] text-ellipsis"
+      [ngClass]="{'border-red-500':form.get('provider')?.hasError('required') && form.get('provider')?.touched}"
+    >
+      <option value="" class="">Selecciona un proveedor</option>
+      <option [value]="provider.id" *ngFor="let provider of allProviders">{{provider.name}}</option>
+    </select>
+    <span *ngIf="form.get('provider')?.hasError('required') && form.get('provider')?.touched" class="text-[12px] absolute bottom-0 text-red-500">
+      El proveedor es requerido.
+    </span>
+  </div>
+  <div class="flex flex-col pb-3 relative">
+    <label 
+      for="reason" 
+      class="text-[14px] md:text-[18px] font-semibold"
+      [ngClass]="{'text-red-500':form.get('reason')?.hasError('required') && form.get('reason')?.touched}"
+    >
+      Motivo:
+    </label>
+    <textarea
+      name="reason" 
+      cols="30" 
+      rows="2"
+      class="py-1 px-2 border-2 rounded-lg border-[#6D6D6D] text-[#6D6D6D] shadow-md focus:outline-0 focus:border-[#31241E] resize-none"
+      [ngClass]="{'border-red-500':form.get('reason')?.hasError('required') && form.get('reason')?.touched}"
+      formControlName="reason"
+    ></textarea>
+    <span *ngIf="form.get('reason')?.hasError('required') && form.get('reason')?.touched" class="text-[12px] absolute bottom-0 text-red-500">
+      El motivo es requerido.
+    </span>
+  </div>
+  <div class="flex gap-x-6 justify-between mt-2">
+    <button type="submit" [disabled]="form.invalid" class="w-full disabled:opacity-75 p-2 bg-[#31241e] text-white rounded-lg flex-1">Aceptar</button>
+  </div>
+</form>
+<ng-template #alertMessage>
+  <h3 class="text-center font-bold text-[18px] my-2">
+    {{message}}
+  </h3>
+</ng-template>

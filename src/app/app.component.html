@@ -1,0 +1,5 @@
+<app-sidebar *ngIf="isLogged"></app-sidebar>
+<div [ngClass]="{'pt-[75px] lg:pl-64': isLogged}" class="home">
+  <app-navbar *ngIf="isLogged"></app-navbar>
+  <router-outlet></router-outlet>
+</div>
