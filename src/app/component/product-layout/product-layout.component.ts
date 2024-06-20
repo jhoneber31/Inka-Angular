@@ -35,6 +35,7 @@ export class ProductLayoutComponent implements OnInit {
 
   ngOnInit(): void {
     if(this.product?.id) {
+      console.log("el id es: ",this.product.id )
       this.buttonText = 'Actualizar';
       this.getProduct();
     }
@@ -50,6 +51,8 @@ export class ProductLayoutComponent implements OnInit {
       image: this.product?.imagen
     })
     this.selectedFile = this.product!.imagen;
+
+    console.log("El formulario es: ", this.form.value)
   }
 
   fileValidator(): ValidatorFn {
@@ -100,42 +103,56 @@ export class ProductLayoutComponent implements OnInit {
     }
   }
 
-  submitProduct(): void {
-    this.createURLimage(() => {
-      let data: Content = {
-        nombre: this.form.value.name,
-        medida: this.form.value.dimension,
-        descripcion: 'description',
-        precio: this.form.value.unitPrice,
-        imagen: this.form.value.image,
-        categoriaProductos: {
-          id: this.form.value.category,
-        },
-        tipoProducto: {
-          id: this.form.value.type,
-        }
-      };
-
-      if(this.product?.id) {
-        data.id = this.product.id;
-        this.productService.updateProduct(data)
-          .subscribe({
-            next: response => {
-              this.message = response.message;
-            },
-            error: err => console.error('Error occurred: ' + err),
-            complete: () => console.log('Product update completed')
-          })
-      } else {
-        this.productService.createProduct(data)
-        .subscribe({
-          next: response => {
-            this.message = response.message;
-          },
-          error: err => console.error('Error occurred: ' + err),
-          complete: () => console.log('Product creation completed')
-        });
-      }
+  createProduct(data: Content):void {
+    this.productService.createProduct(data)
+    .subscribe({
+      next: response => {
+        this.message = response.message;
+      },
+      error: err => console.error('Error occurred: ' + err),
+      complete: () => console.log('Product creation completed')
     });
+  }
+
+  updateProduct(data:Content):void {
+    this.productService.updateProduct(data)
+    .subscribe({
+      next: response => {
+        this.message = response.message;
+      },
+      error: err => console.error('Error occurred: ' + err),
+      complete: () => console.log('Product update completed')
+    })
+  }
+
+  submitProduct(): void {
+
+    let data: Content = {
+      nombre: this.form.value.name,
+      medida: this.form.value.dimension,
+      descripcion: 'description',
+      precio: this.form.value.unitPrice,
+      imagen: this.form.value.image,
+      categoriaProductos: {
+        id: this.form.value.category,
+      },
+      tipoProducto: {
+        id: this.form.value.type,
+      }
+    };
+
+    if(this.product?.id) {
+      data.id = this.product.id;
+      if (this.imageSelected instanceof File) {
+        this.createURLimage(() => {
+          data.imagen = this.form.value.image;
+          this.updateProduct(data);
+        });
+      } else {
+        this.updateProduct(data);
+      }
+    } else {
+      this.createProduct(data)
+    }
   }
 }

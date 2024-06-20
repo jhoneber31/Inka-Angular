@@ -77,7 +77,7 @@ export class MovementTypeComponent implements OnInit {
     if(this.typeMovement === 1) {
       data = {
         ...data,
-        proveedor: {
+        provedor: {
           id: this.form.value.provider
         }
       }
