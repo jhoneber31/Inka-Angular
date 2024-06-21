@@ -6,6 +6,7 @@ import { ContentHistory, HistoryList } from 'src/app/interfaces/historyList';
 import { ProductoService } from 'src/app/service/producto.service';
 import { DatePipe } from '@angular/common';
 import { Providers, listProviders } from 'src/app/core/lisProviders';
+import * as Highcharts from 'highcharts';
 
 @Component({
   selector: 'app-history',
@@ -35,6 +36,34 @@ export class HistoryComponent implements OnInit, OnDestroy{
     end: new FormControl<Date | null>(null),
   });
 
+  public Highcharts: typeof Highcharts = Highcharts;
+  public chartOptions: Highcharts.Options = {
+    title: {
+      align: 'left', 
+      style: {
+        whiteSpace: 'nowrap',
+        fontSize: '18px',
+      },
+      text: 'INFORME DE MOVIMIENTOS',
+      x: -10,      
+    },
+    chart: {
+      type: 'column'
+    },
+    xAxis: {
+      categories: [],
+      title: {
+        text: 'Proveedores'
+      }
+    },
+    yAxis: {
+      min: 0,
+      title: {
+        text: 'Cantidad Aportada'
+      }
+    }
+  };
+
   constructor(
     private productService: ProductoService,
     private route: ActivatedRoute,
@@ -45,6 +74,7 @@ export class HistoryComponent implements OnInit, OnDestroy{
   ngOnInit(): void {
     this.setSuscritpion();
     this.setSuscritpionRange();
+    this.getDashboardByProviders();
   }
 
   setSuscritpion():void {
@@ -114,6 +144,41 @@ export class HistoryComponent implements OnInit, OnDestroy{
         this.error = false;
       }
     })
+  }
+
+  getDashboardByProviders(): void {
+    this.productService.getMovementByProviders().pipe(take(1))
+      .subscribe({
+        next: (data) => {
+          const providersName = data.map(item => item.nombre);
+          const providersQuantity = data.map(item => item.cantidad);
+
+          this.updateChartOptions(providersName, providersQuantity);
+        },
+        error: (error) => {
+          console.log('Error al obtener los datos:', error);
+        },
+        complete: () => {
+          console.log('Completado');
+        }
+      });
+  }
+
+  updateChartOptions(providersName: string[], providersQuantity: number[]): void {
+
+    this.chartOptions.xAxis = {
+      categories: providersName,
+      title: {
+        text: 'Proveedores'
+      }
+    }
+    this.chartOptions.series = [{
+      type: 'column',
+      colorByPoint: true,
+      data: providersQuantity
+    }];
+
+    this.chartOptions = { ...this.chartOptions };
   }
 
   showInfoHistory(history:ContentHistory):void {

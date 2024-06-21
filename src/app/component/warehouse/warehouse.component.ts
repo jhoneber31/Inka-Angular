@@ -4,6 +4,7 @@ import { ProductoService } from 'src/app/service/producto.service';
 import { Products } from '../../interfaces/productList';
 import { ActivatedRoute, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { BehaviorSubject, Subscription, take } from 'rxjs';
+import { ModalService } from 'src/app/service/modal.service';
 
 @Component({
   selector: 'app-warehouse',
@@ -30,11 +31,15 @@ export class WarehouseComponent implements OnInit, OnDestroy {
   constructor(
     private router:Router,
     private productService:ProductoService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private modalService: ModalService
   ) {}
 
   ngOnInit(): void {
     this.setSuscritpion();
+    this.modalService.showModal$.subscribe(value => {
+      this.showModal = value;
+    })
   }
 
   setSuscritpion(): void {
@@ -91,29 +96,37 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     this.setPage(0);
   }
 
-  openModal(content: string):void {
-    this.modalContent = content;
-    this.showModal = true;
-    if(content === "newProduct") {
-      this.title = "Crear Producto"
-    }else if (content === "register-movement") {
-      this.title = "Ingresar Producto";
-    }
-  }
   closeModal():void {
     this.showModal = false;
+  }
+  createNewProduct():void {
+    this.title = "Crear Producto"
+    this.modalContent = 'newProduct';
+    this.modalService.openModal();
   }
   editProduct(product: Content):void {
     this.selectedProduct = product;
     this.title = "Editar Producto"
-    this.openModal('edit-product');
+    this.modalContent = 'edit-product';
+    this.modalService.openModal();
+  }
+  deleteProduct(product: Content):void {
+    this.selectedProduct = product;
+    this.title = "Eliminar Producto"
+    this.modalContent = 'delete-product';
+    this.modalService.openModal();
   }
   registerMovement(product: Content):void {
     this.selectedProduct = product;
-    this.openModal('register-movement');
+    this.title = "Ingresar Producto"
+    this.modalContent = 'register-movement';
+    this.modalService.openModal();
   }
-  updateTitle(newTitle:string):void {
+  updateTitleByMovementPage(newTitle:string):void {
     this.title = newTitle;
+  }
+  refreshProducts():void {
+    this.getProducts(this.getPage());
   }
   ngOnDestroy(): void {
     this.$page.unsubscribe();

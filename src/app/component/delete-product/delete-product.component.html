@@ -1,0 +1,22 @@
+<div class="w-[300px]" *ngIf="!message; else:alertMessage">
+  <h3>Estas seguro de eliminar <strong>{{product?.nombre}}?</strong> </h3>
+  <div class="flex mt-6 gap-x-6">
+    <button [disabled]="loading" class="p-2 bg-[#31241e] text-white rounded-lg flex-1 disabled:opacity-75" (click)="closeModal()">
+      Cancelar
+    </button>
+    <button [disabled]="loading" class="p-2 bg-[#31241e] text-white rounded-lg flex-1 disabled:opacity-75" (click)="deleteProduct()">
+      Eliminar
+    </button>
+  </div>
+</div>
+<ng-template #alertMessage>
+  <h3 class="text-center font-bold text-[18px] my-2">
+    {{message}}
+  </h3>
+  <button
+    class="w-full p-2 bg-[#31241e] text-white rounded-lg flex-1"
+    (click)="deletetedProduct()"
+  >
+    Aceptar
+  </button>
+</ng-template>

@@ -85,11 +85,22 @@
     </span>
   </div>
   <div class="flex gap-x-6 justify-between mt-2">
-    <button type="submit" [disabled]="form.invalid" class="w-full disabled:opacity-75 p-2 bg-[#31241e] text-white rounded-lg flex-1">Aceptar</button>
+    <button type="button" [disabled]="loading" class="disabled:opacity-75 p-2 bg-[#31241e] text-white rounded-lg flex-1" (click)="modalClose()">
+      Cancelar
+    </button>
+    <button type="submit" [disabled]="form.invalid || loading" class="disabled:opacity-75 p-2 bg-[#31241e] text-white rounded-lg flex-1">
+      Aceptar
+    </button>
   </div>
 </form>
 <ng-template #alertMessage>
   <h3 class="text-center font-bold text-[18px] my-2">
     {{message}}
   </h3>
+  <button
+  class="w-full p-2 bg-[#31241e] text-white rounded-lg flex-1"
+  (click)="movementChanges()"
+  >
+    Aceptar
+  </button>
 </ng-template>

@@ -8,7 +8,7 @@ import { GLOBAL } from './global';
 import {LoginService} from './login.service';
 import { CreatedResponse, ProductList } from '../interfaces/productList';
 import { SearchResponseImage } from '../interfaces/imageUrl';
-import { HistoryList } from '../interfaces/historyList';
+import { HistoryList, ProviderQuantity } from '../interfaces/historyList';
 
 @Injectable({
   providedIn: 'root'
@@ -27,18 +27,6 @@ export class ProductoService {
       "Authorization": "Bearer "+this.loginService.getToken(),
     });
     return this.http.get<ProductList>(this.url + `api/productos/listar?nombre=${name}&page=${page}`,{headers})
-  }
-
-  crear(producto: any,tipo:any): Observable<Producto> {
-    let headers = new HttpHeaders({
-      "Authorization": "Bearer "+this.loginService.getToken(),
-      });
-
-      if(tipo == 1){
-        return this.http.post<Producto>(this.url + 'api/productos/productos', producto ,{headers});
-      }else{
-        return this.http.post<Producto>(this.url + 'api/productos/productos-imagen', producto ,{headers});
-      }
   }
 
   createProduct(data:any):Observable<CreatedResponse>  {
@@ -78,26 +66,21 @@ export class ProductoService {
     });
     return this.http.get<HistoryList>(this.url + `api/movimientos/listar?page=${page}&dateFrom=${dateFrom}&dateTo=${dateTo}`,{headers})
   }
-
-  actualizar(producto: any, tipo: any): Observable<Producto> {
+  getMovementByProviders(): Observable<ProviderQuantity[]> {
     let headers = new HttpHeaders({
+      "Content-Type": "application/json",
       "Authorization": "Bearer "+this.loginService.getToken(),
-
-      });
-      if(tipo == 1){
-        return this.http.put<Producto>(this.url + 'api/productos/productos', producto ,{headers});
-      }else{
-        return this.http.put<Producto>(this.url + 'api/productos/productos-imagen', producto ,{headers});
-      }
-      
+    });
+    return this.http.get<ProviderQuantity[]>(this.url + 'api/movimientos/dashboard', {headers});
   }
-  eliminar(producto: any) {
+
+  deleteProduct(data: any):Observable<CreatedResponse> {
     let headers = new HttpHeaders({
       "Content-Type": "application/json",
       "Authorization": "Bearer "+this.loginService.getToken(),
 
       });
-    return this.http.post(this.url + 'api/productos/eliminar', producto ,{headers});
+    return this.http.post<CreatedResponse>(this.url + 'api/productos/eliminar', data ,{headers});
   }
 
 }

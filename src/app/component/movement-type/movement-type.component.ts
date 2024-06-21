@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Providers, listProviders } from 'src/app/core/lisProviders';
 import { Content } from 'src/app/interfaces/productList';
+import { ModalService } from 'src/app/service/modal.service';
 import { ProductoService } from 'src/app/service/producto.service';
 
 @Component({
@@ -15,12 +16,16 @@ export class MovementTypeComponent implements OnInit {
   @Output()
   public title = new EventEmitter<string>();
 
+  @Output()
+  public updateMovement: EventEmitter<void> = new EventEmitter<void>();
+
+  public loading: boolean = false;
   public message: string = '';
   public typeMovement:number = 1;
   public allProviders:Providers[] = listProviders;
   public form: FormGroup;
   
-  constructor(private producService:ProductoService, private formBuilder:FormBuilder) { 
+  constructor(private producService:ProductoService, private formBuilder:FormBuilder, private modalService: ModalService) { 
     this.form = this.formBuilder.group({
       provider: ['', Validators.required],
       productId: ['', Validators.required],
@@ -59,6 +64,7 @@ export class MovementTypeComponent implements OnInit {
   }
 
   handleSubmit(): void {
+    this.loading = true;
     let data:any = {
       tipo: {
         id: this.typeMovement,
@@ -88,8 +94,21 @@ export class MovementTypeComponent implements OnInit {
         next: response => {
           this.message = response.message;
         },
-        error: err => console.error('Error occurred: ' + err),
-        complete: () => console.log('Product update completed')
+        error: err => {
+          this.message = err.error.message;
+        },
+        complete: () => {
+          this.loading = false;
+        }
       })
+  }
+
+  modalClose(): void {
+    this.modalService.closeModal();
+  }
+
+  movementChanges(): void {
+    this.modalClose();
+    this.updateMovement.emit();
   }
 }

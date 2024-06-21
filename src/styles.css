@@ -24,3 +24,10 @@ input:focus, select:focus, textarea:focus {
 .section-home {
   height: calc(100vh - 71px);
 }
+
+.highcharts-credits {
+  display: none;
+}
+.highcharts-legend.highcharts-no-tooltip {
+  display: none;
+}

@@ -75,3 +75,31 @@ export interface Sort {
   sorted:   boolean;
   unsorted: boolean;
 }
+
+export interface ProviderQuantity {
+  cantidad: number;
+  nombre:   string;
+}
+
+export interface HighchartsOptions {
+  chart: {
+    type: string;
+  };
+  xAxis: {
+    categories: string[];
+    title: {
+      text: string;
+    };
+  };
+  yAxis: {
+    min: number;
+    title: {
+      text: string;
+    };
+  };
+  series: {
+    name: string;
+    type: string;
+    data: number[];
+  }[];
+}

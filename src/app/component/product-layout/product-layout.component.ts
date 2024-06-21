@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { categorySeals, typesSeals } from 'src/app/core/typesProduct';
 import { Content } from 'src/app/interfaces/productList';
+import { ModalService } from 'src/app/service/modal.service';
 import { ProductoService } from 'src/app/service/producto.service';
 
 @Component({
@@ -13,16 +14,20 @@ export class ProductLayoutComponent implements OnInit {
   @Input()
   public product: Content | null = null;
 
+  @Output() 
+  public productUpdated: EventEmitter<void> = new EventEmitter<void>();
+
   public buttonText: string = 'Crear';
   public message: string = '';
   public form:FormGroup;
   public selectedFile: string | ArrayBuffer | null = null;
   public imageSelected: File | string | null = null;
+  public loading: boolean = false;
 
   public typeSeal:any[] = typesSeals;
   public categorySeal:any[] = categorySeals;
 
-  constructor(private productService:ProductoService, private formBuilder:FormBuilder) {
+  constructor(private productService:ProductoService, private formBuilder:FormBuilder, private modalService:ModalService) {
     this.form = this.formBuilder.group({
       name: ['', Validators.required],
       dimension: ['', Validators.required],
@@ -35,7 +40,6 @@ export class ProductLayoutComponent implements OnInit {
 
   ngOnInit(): void {
     if(this.product?.id) {
-      console.log("el id es: ",this.product.id )
       this.buttonText = 'Actualizar';
       this.getProduct();
     }
@@ -51,8 +55,6 @@ export class ProductLayoutComponent implements OnInit {
       image: this.product?.imagen
     })
     this.selectedFile = this.product!.imagen;
-
-    console.log("El formulario es: ", this.form.value)
   }
 
   fileValidator(): ValidatorFn {
@@ -109,8 +111,12 @@ export class ProductLayoutComponent implements OnInit {
       next: response => {
         this.message = response.message;
       },
-      error: err => console.error('Error occurred: ' + err),
-      complete: () => console.log('Product creation completed')
+      error: err => {
+        this.message = err.error.message;
+      },
+      complete: () => {
+        this.loading = false;
+      }
     });
   }
 
@@ -120,13 +126,17 @@ export class ProductLayoutComponent implements OnInit {
       next: response => {
         this.message = response.message;
       },
-      error: err => console.error('Error occurred: ' + err),
-      complete: () => console.log('Product update completed')
+      error: err => {
+        this.message = err.error.message;
+      },
+      complete: () => {
+        this.loading = false;
+      }
     })
   }
 
   submitProduct(): void {
-
+    this.loading = true;
     let data: Content = {
       nombre: this.form.value.name,
       medida: this.form.value.dimension,
@@ -152,7 +162,18 @@ export class ProductLayoutComponent implements OnInit {
         this.updateProduct(data);
       }
     } else {
-      this.createProduct(data)
+      this.createURLimage(() => {
+        data.imagen = this.form.value.image;
+        this.createProduct(data);
+      })
     }
+  }
+
+  closeModal():void {
+    this.modalService.closeModal();
+  }
+  updateChanges():void {
+    this.closeModal();
+    this.productUpdated.emit();
   }
 }

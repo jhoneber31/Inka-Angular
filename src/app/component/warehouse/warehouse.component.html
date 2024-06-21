@@ -7,8 +7,8 @@
           <input type="text" class="rounded-lg w-full py-2 px-3 bg-[#DED9D9] placeholder:text-[#7a7a7a] border-2 border-transparent  focus:outline-none focus:border-2 focus:border-[#7a7a7a] focus:ring-0" placeholder="Buscar producto" (keyup.enter)="searchProducts($event)">
           <img src="/assets/img/search-icon.svg" width="20" alt="search-icon" class="absolute top-2 right-2">
         </div>
-        <img src="/assets/img/plus-circle-icon.svg" width="45" alt="plus-circle" class="cursor-pointer lg:hidden" (click)="openModal('newProduct')">
-        <button class="hidden lg:flex text-white py-2 px-3 rounded-lg bg-[#7D6F6F] items-center gap-x-2 overflow-hidden text-ellipsis whitespace-nowrap lg:max-w-[200px] xl:max-w-none" (click)="openModal('newProduct')">
+        <img src="/assets/img/plus-circle-icon.svg" width="45" alt="plus-circle" class="cursor-pointer lg:hidden" (click)="createNewProduct()">
+        <button class="hidden lg:flex text-white py-2 px-3 rounded-lg bg-[#7D6F6F] items-center gap-x-2 overflow-hidden text-ellipsis whitespace-nowrap lg:max-w-[200px] xl:max-w-none" (click)="createNewProduct()">
           <img src="/assets/img/plus-icon.svg" width="25" alt="plus-icon">
           <span class="font-semibold text-[16px] block truncate">AGREGAR PRODUCTO</span>
         </button>
@@ -30,7 +30,7 @@
           <div class="flex flex-col justify-between  gap-y-4">
             <img src="/assets/img/movement-icon.svg" width="30" alt="movement-icon" class="cursor-pointer" (click)="registerMovement(product)">
             <img src="/assets/img/edit-icon.svg" width="30" alt="edit" class="cursor-pointer" (click)="editProduct(product)">
-            <img src="/assets/img/delete-icon.svg" width="30" alt="delete-icon" class="cursor-pointer">
+            <img src="/assets/img/delete-icon.svg" width="30" alt="delete-icon" class="cursor-pointer" (click)="deleteProduct(product)">
           </div>
         </div>
       </div>
@@ -49,12 +49,12 @@
         </ul>
       </div>
     </div>
-    <app-modal *ngIf="showModal" [title]="title" (closeModal)="closeModal()">
+    <app-modal *ngIf="showModal" [title]="title">
       <ng-container [ngSwitch]="modalContent">
-        <app-product-layout *ngSwitchCase="'newProduct'"></app-product-layout>
-        <app-choose-action *ngSwitchCase="'product-options'" [product]="selectedProduct" (edit)="editProduct($event)" (register)="registerMovement($event)"></app-choose-action>
-        <app-product-layout *ngSwitchCase="'edit-product'" [product]="selectedProduct"></app-product-layout>
-        <app-movement-type *ngSwitchCase="'register-movement'" [product]="selectedProduct" (title)="updateTitle($event)" ></app-movement-type>
+        <app-product-layout *ngSwitchCase="'newProduct'" (productUpdated)="refreshProducts()"></app-product-layout>
+        <app-product-layout *ngSwitchCase="'edit-product'" [product]="selectedProduct" (productUpdated)="refreshProducts()"></app-product-layout>
+        <app-delete-product *ngSwitchCase="'delete-product'" [product]="selectedProduct" (productDeleted)="refreshProducts()"></app-delete-product>
+        <app-movement-type *ngSwitchCase="'register-movement'" [product]="selectedProduct" (title)="updateTitleByMovementPage($event)" (updateMovement)="refreshProducts()" ></app-movement-type>
       </ng-container>
     </app-modal>
   </section>

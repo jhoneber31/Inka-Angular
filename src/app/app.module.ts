@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatCardModule } from '@angular/material/card'; 
+import { HighchartsChartModule } from 'highcharts-angular';
 
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {JsonPipe} from '@angular/common';
@@ -24,10 +25,11 @@ import { SidebarComponent } from './component/sidebar/sidebar.component';
 import { LoaderComponent } from './component/loader/loader.component';
 import { SearchPageComponent } from './component/search-page/search-page.component';
 import { HistoryInformationComponent } from './component/history-information/history-information.component';
+import { DeleteProductComponent } from './component/delete-product/delete-product.component';
 
 @NgModule({
   declarations: [
-    AppComponent,routingComponents, NavbarComponent, WarehouseComponent, ModalComponent, ProductLayoutComponent, ChooseActionComponent, MovementTypeComponent, HistoryComponent, SidebarComponent, LoaderComponent, SearchPageComponent, HistoryInformationComponent,
+    AppComponent,routingComponents, NavbarComponent, WarehouseComponent, ModalComponent, ProductLayoutComponent, ChooseActionComponent, MovementTypeComponent, HistoryComponent, SidebarComponent, LoaderComponent, SearchPageComponent, HistoryInformationComponent, DeleteProductComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,7 +42,8 @@ import { HistoryInformationComponent } from './component/history-information/his
     MatNativeDateModule,
     MatCardModule,
     MatFormFieldModule,
-    JsonPipe
+    JsonPipe,
+    HighchartsChartModule
   ],
   providers: [ProductoService],
   bootstrap: [AppComponent]
