@@ -62,7 +62,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
   }
 
   setPage(page: number): void {
-    if( page < 0 || page >= this.totalPages) return;
+    if (this.totalPages > 0 && (page < 0 || page >= this.totalPages)) return;
     this.pageSubject.next(page)
     this.router.navigate([], {
       relativeTo: this.route,
@@ -81,7 +81,11 @@ export class WarehouseComponent implements OnInit, OnDestroy {
           this.categories = data.categorias;
           this.totalPages = data.productos.totalPages;
         },
-        error: err => console.error('Observable emitted an error: ' + err),
+        error: err => {
+          this.products = [];
+          this.totalPages = 0;
+          console.error('Observable emitted an error: ' + err);
+        },
         complete: () => {
           this.loading = false;
         }

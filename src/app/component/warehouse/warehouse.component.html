@@ -13,40 +13,42 @@
           <span class="font-semibold text-[16px] block truncate">AGREGAR PRODUCTO</span>
         </button>
       </div>
-      <div class="grid sm:grid-cols-2 grid-cols-3 gap-4 mt-10 xl:grid-cols-3">
-        <div *ngFor="let product of products" class="col-span-3 px-2 py-3 rounded-lg shadow-sm border-2 border-[#666666] flex sm:col-span-1 relative">
-          <div class="w-[120px] h-[134px] flex items-center justify-center">
-            <img [src]="product.imagen" alt="Product Image" class="w-[100%] h-[100%] object-cover">
-          </div>
-          <div class="ml-2 grow overflow-hidden text-ellipsis whitespace-nowrap">
-            <h3 class="truncate text-[#FF7000] font-bold xl:text-[18px]">{{product.nombre}}</h3>
-            <div class="flex flex-col gap-y-1 grow text-[14px] mt-1 xl:text-[16px]">
-              <span class="block truncate"><strong>Tipo: </strong> {{product.tipoProducto.nombre}}</span>
-              <span class="block truncate"><strong>Diseño: </strong> {{product.categoriaProductos.nombre}}</span>
-              <span class="block truncate"><strong>Precio Unit.: </strong> {{product.precio}}</span>
-              <span class="block truncate"><strong>Cantidad: </strong> {{product.stock}}</span>
+      <div class="pb-4" *ngIf="products.length > 0; else productsNotFound">
+        <div class="grid sm:grid-cols-2 grid-cols-3 gap-4 mt-10 xl:grid-cols-3">
+          <div *ngFor="let product of products" class="col-span-3 px-2 py-3 rounded-lg shadow-sm border-2 border-[#666666] flex sm:col-span-1 relative">
+            <div class="w-[120px] h-[134px] flex items-center justify-center">
+              <img [src]="product.imagen" alt="Product Image" class="w-[100%] h-[100%] object-cover">
+            </div>
+            <div class="ml-2 grow overflow-hidden text-ellipsis whitespace-nowrap">
+              <h3 class="truncate text-[#FF7000] font-bold xl:text-[18px]">{{product.nombre}}</h3>
+              <div class="flex flex-col gap-y-1 grow text-[14px] mt-1 xl:text-[16px]">
+                <span class="block truncate"><strong>Tipo: </strong> {{product.tipoProducto.nombre}}</span>
+                <span class="block truncate"><strong>Diseño: </strong> {{product.categoriaProductos.nombre}}</span>
+                <span class="block truncate"><strong>Precio Unit.: </strong> {{product.precio}}</span>
+                <span class="block truncate"><strong>Cantidad: </strong> {{product.stock}}</span>
+              </div>
+            </div>
+            <div class="flex flex-col justify-between  gap-y-4">
+              <img src="/assets/img/movement-icon.svg" width="30" alt="movement-icon" class="cursor-pointer" (click)="registerMovement(product)">
+              <img src="/assets/img/edit-icon.svg" width="30" alt="edit" class="cursor-pointer" (click)="editProduct(product)">
+              <img src="/assets/img/delete-icon.svg" width="30" alt="delete-icon" class="cursor-pointer" (click)="deleteProduct(product)">
             </div>
           </div>
-          <div class="flex flex-col justify-between  gap-y-4">
-            <img src="/assets/img/movement-icon.svg" width="30" alt="movement-icon" class="cursor-pointer" (click)="registerMovement(product)">
-            <img src="/assets/img/edit-icon.svg" width="30" alt="edit" class="cursor-pointer" (click)="editProduct(product)">
-            <img src="/assets/img/delete-icon.svg" width="30" alt="delete-icon" class="cursor-pointer" (click)="deleteProduct(product)">
-          </div>
         </div>
-      </div>
-      <div class="mt-6 w-full flex justify-center">
-        <ul class="flex w-fit rounded-lg border-2 cursor-pointer items-center">
-          <li class="py-2.5 px-2 border-r-2" (click)="setPage(getPage() - 1)"><img src="/assets/img/arrow-prev.svg" width="30" alt="arrow-prev"></li>
-          <li 
-            *ngFor="let numberPage of [].constructor(totalPages); let i = index" 
-            class="flex items-center px-3 text-[16px] h-full"
-            [ngClass]="{'border-r-2': i < totalPages-1, 'bg-[#DED9D9]': i === getPage()}"
-            (click)="setPage(i)"
-          >
-            {{i+1}}
-          </li>
-          <li class="py-2.5 px-2 border-l-2" (click)="setPage(getPage() + 1)"><img src="/assets/img/arrow-next.svg" width="30" alt="arrow-next"></li>
-        </ul>
+        <div class="mt-6 w-full flex justify-center">
+          <ul class="flex w-fit rounded-lg border-2 cursor-pointer items-center">
+            <li class="py-2.5 px-2 border-r-2" (click)="setPage(getPage() - 1)"><img src="/assets/img/arrow-prev.svg" width="30" alt="arrow-prev"></li>
+            <li 
+              *ngFor="let numberPage of [].constructor(totalPages); let i = index" 
+              class="flex items-center px-3 text-[16px] h-full"
+              [ngClass]="{'border-r-2': i < totalPages-1, 'bg-[#DED9D9]': i === getPage()}"
+              (click)="setPage(i)"
+            >
+              {{i+1}}
+            </li>
+            <li class="py-2.5 px-2 border-l-2" (click)="setPage(getPage() + 1)"><img src="/assets/img/arrow-next.svg" width="30" alt="arrow-next"></li>
+          </ul>
+        </div>
       </div>
     </div>
     <app-modal *ngIf="showModal" [title]="title">
@@ -58,4 +60,7 @@
       </ng-container>
     </app-modal>
   </section>
+  <ng-template #productsNotFound>
+    <app-page-not-found></app-page-not-found>
+  </ng-template>
 </ng-template>
