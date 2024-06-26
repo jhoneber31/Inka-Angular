@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 
 import { Observable, catchError, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Producto } from '../model/producto';
-import { Paginate } from '../model/paginate';
 import { GLOBAL } from './global';
 import {LoginService} from './login.service';
 import { CreatedResponse, ProductList } from '../interfaces/productList';
