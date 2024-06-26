@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Categories, Content, ProductList } from 'src/app/interfaces/productList';
 import { ProductoService } from 'src/app/service/producto.service';
-import { Products } from '../../interfaces/productList';
-import { ActivatedRoute, Router, ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Subscription, take } from 'rxjs';
 import { ModalService } from 'src/app/service/modal.service';
 
