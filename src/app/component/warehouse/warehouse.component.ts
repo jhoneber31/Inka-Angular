@@ -99,6 +99,22 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     this.setPage(0);
   }
 
+  downloadPdf():void {
+    this.productService.downloadReportPdf()
+      .subscribe({
+        next:(data) => {
+          const downloadURL = window.URL.createObjectURL(data);
+          const link = document.createElement("a");
+          link.href=downloadURL;
+          link.download = "Reporte.pdf";
+          link.click();
+        },
+        error: err => {
+          console.log("ERROR AL DESCARGAR EL REPORTE: ", err)
+        }
+      })
+  }
+
   closeModal():void {
     this.showModal = false;
   }

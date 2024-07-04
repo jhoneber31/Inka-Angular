@@ -81,4 +81,15 @@ export class ProductoService {
     return this.http.post<CreatedResponse>(this.url + 'api/productos/eliminar', data ,{headers});
   }
 
+  downloadReportPdf() {
+    let headers = new HttpHeaders({
+      "Content-Type": "application/json",
+      "Authorization": "Bearer "+this.loginService.getToken(),
+      });
+      return this.http.get(this.url + "api/productos/pdf", {
+        headers: headers,
+        responseType: 'blob'
+      });
+  }
+
 }
