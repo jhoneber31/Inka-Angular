@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   public loading:boolean = false;
 
   constructor(private router: Router, private loginService: LoginService) {
-    this.login = new Usuario('esaul@gmail.com', '', '');
+    this.login = new Usuario('esaul@gmail.com', '12345678', '');
     this.alerta = false;
   }
   ngOnInit(): void {
