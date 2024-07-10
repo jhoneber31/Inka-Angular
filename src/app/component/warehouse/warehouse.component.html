@@ -3,15 +3,24 @@
   <section class="section-home">
     <div class="container mx-auto py-6 md:px-12 h-full">
       <div class="flex justify-between items-center">
-        <div class="relative w-10/12 lg:w-8/12 xl:w-9/12">
+        <div class="relative w-7/12 md:w-9/12 lg:w-6/12 xl:w-7/12">
           <input type="text" class="rounded-lg w-full py-2 px-3 bg-[#DED9D9] placeholder:text-[#7a7a7a] border-2 border-transparent  focus:outline-none focus:border-2 focus:border-[#7a7a7a] focus:ring-0" placeholder="Buscar producto" (keyup.enter)="searchProducts($event)">
-          <img src="/assets/img/search-icon.svg" width="20" alt="search-icon" class="absolute top-2 right-2">
+          <img src="/assets/img/search-icon.svg" width="20" alt="search-icon" class="absolute top-3 right-3">
         </div>
-        <img src="/assets/img/plus-circle-icon.svg" width="45" alt="plus-circle" class="cursor-pointer lg:hidden" (click)="createNewProduct()">
-        <button class="hidden lg:flex text-white py-2 px-3 rounded-lg bg-[#7D6F6F] items-center gap-x-2 overflow-hidden text-ellipsis whitespace-nowrap lg:max-w-[200px] xl:max-w-none" (click)="createNewProduct()">
-          <img src="/assets/img/plus-icon.svg" width="25" alt="plus-icon">
-          <span class="font-semibold text-[16px] block truncate">AGREGAR PRODUCTO</span>
-        </button>
+        <div class="flex gap-x-6 lg:hidden">
+          <img src="/assets/img/pdf-icon.svg" width="45" alt="pdf-icon" class="cursor-pointer lg:hidden" (click)="downloadPdf()">
+          <img src="/assets/img/plus-circle-icon.svg" width="45" alt="plus-circle" class="cursor-pointer lg:hidden" (click)="createNewProduct()">
+        </div>
+        <div class="hidden lg:flex gap-x-6">
+          <button class="hidden lg:flex text-white py-2 px-3 rounded-lg bg-[#7D6F6F] items-center gap-x-2 overflow-hidden text-ellipsis whitespace-nowrap lg:max-w-[140px] xl:max-w-[170px] 2xl:max-w-none" (click)="downloadPdf()">
+            <img src="/assets/img/pdf-icon-clear.svg" width="25" alt="pdf-icon">
+            <span class="font-semibold text-[16px] block truncate">DESCARGAR REPORTE</span>
+          </button>
+          <button class="hidden lg:flex text-white py-2 px-3 rounded-lg bg-[#7D6F6F] items-center gap-x-2 overflow-hidden text-ellipsis whitespace-nowrap lg:max-w-[140px] xl:max-w-[170px] 2xl:max-w-none" (click)="createNewProduct()">
+            <img src="/assets/img/plus-icon.svg" width="25" alt="plus-icon">
+            <span class="font-semibold text-[16px] block truncate">AGREGAR PRODUCTO</span>
+          </button>
+        </div>
       </div>
       <div class="pb-4" *ngIf="products.length > 0; else productsNotFound">
         <div class="grid sm:grid-cols-2 grid-cols-3 gap-4 mt-10 xl:grid-cols-3">
