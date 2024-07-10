@@ -192,8 +192,20 @@ export class HistoryComponent implements OnInit, OnDestroy{
     this.showModal = false;
   }
 
-  ngOnDestroy(): void {
-    this.$page.unsubscribe();
+  downloadPdf():void {
+    this.productService.downloadReportMovementPdf()
+      .subscribe({
+        next:(data) => {
+          const downloadURL = window.URL.createObjectURL(data);
+          const link = document.createElement("a");
+          link.href=downloadURL;
+          link.download = "Reporte.pdf";
+          link.click();
+        },
+        error: err => {
+          console.log("ERROR AL DESCARGAR EL REPORTE: ", err)
+        }
+      })
   }
 
   setTitle(newTitle:string):void {
@@ -201,4 +213,7 @@ export class HistoryComponent implements OnInit, OnDestroy{
     console.log('New title:', this.title);
   }
 
+  ngOnDestroy(): void {
+    this.$page.unsubscribe();
+  }
 }

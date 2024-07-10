@@ -92,4 +92,15 @@ export class ProductoService {
       });
   }
 
+  downloadReportMovementPdf() {
+    let headers = new HttpHeaders({
+      "Content-Type": "application/json",
+      "Authorization": "Bearer "+this.loginService.getToken(),
+    });
+    return this.http.get(this.url + "api/movimientos/pdf", {
+      headers: headers,
+      responseType: 'blob'
+    });
+  }
+
 }
