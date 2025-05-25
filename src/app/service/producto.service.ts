@@ -1,106 +1,148 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
-import { Observable, catchError, of } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { GLOBAL } from './global';
-import {LoginService} from './login.service';
-import { CreatedResponse, ProductList } from '../interfaces/productList';
-import { SearchResponseImage } from '../interfaces/imageUrl';
-import { HistoryList, ProviderQuantity } from '../interfaces/historyList';
+import { Observable, catchError, of } from "rxjs";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { GLOBAL } from "./global";
+import { LoginService } from "./login.service";
+import { CreatedResponse, ProductList } from "../interfaces/productList";
+import { SearchResponseImage } from "../interfaces/imageUrl";
+import { HistoryList, ProviderQuantity } from "../interfaces/historyList";
+import { INotificationList } from "../interfaces/notificationList";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class ProductoService {
-
   public url: string;
   public token: any;
-  constructor(private http: HttpClient, private loginService:LoginService) {
+  constructor(private http: HttpClient, private loginService: LoginService) {
     this.url = GLOBAL.url;
   }
 
-  index(name:string, page:number): Observable<ProductList> {
+  index(name: string, page: number): Observable<ProductList> {
     let headers = new HttpHeaders({
       "Content-Type": "application/json",
-      "Authorization": "Bearer "+this.loginService.getToken(),
+      Authorization: "Bearer " + this.loginService.getToken(),
     });
-    return this.http.get<ProductList>(this.url + `api/productos/listar?nombre=${name}&page=${page}`,{headers})
+    return this.http.get<ProductList>(
+      this.url + `api/productos/listar?nombre=${name}&page=${page}`,
+      { headers }
+    );
   }
 
-  createProduct(data:any):Observable<CreatedResponse>  {
+  getNotification(): Observable<INotificationList> {
+    const headers = new HttpHeaders({
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + this.loginService.getToken(),
+    });
+    return this.http.get<INotificationList>(
+      this.url + "api/productos/listar/bajo-stock",
+      { headers }
+    );
+  }
+
+  createProduct(data: any): Observable<CreatedResponse> {
     let headers = new HttpHeaders({
       "Content-Type": "application/json",
-      "Authorization": "Bearer "+this.loginService.getToken(),
+      Authorization: "Bearer " + this.loginService.getToken(),
     });
-    return this.http.post<CreatedResponse>(this.url + 'api/productos/productos', data ,{headers});
+    return this.http.post<CreatedResponse>(
+      this.url + "api/productos/productos",
+      data,
+      { headers }
+    );
   }
 
-  updateProduct(data:any):Observable<CreatedResponse> {
+  updateProduct(data: any): Observable<CreatedResponse> {
     let headers = new HttpHeaders({
       "Content-Type": "application/json",
-      "Authorization": "Bearer "+this.loginService.getToken(),
+      Authorization: "Bearer " + this.loginService.getToken(),
     });
-    return this.http.put<CreatedResponse>(this.url + 'api/productos/productos', data ,{headers});
+    return this.http.put<CreatedResponse>(
+      this.url + "api/productos/productos",
+      data,
+      { headers }
+    );
   }
 
-  uploadImage(file:File): Observable<SearchResponseImage> {
+  uploadImage(file: File): Observable<SearchResponseImage> {
     const formData = new FormData();
-    formData.append('desing', file);
-    return this.http.post<SearchResponseImage>('https://inkaback-production-c8bb.up.railway.app/sales/design', formData )
+    formData.append("desing", file);
+    return this.http.post<SearchResponseImage>(
+      "https://inkaback-production-c8bb.up.railway.app/sales/design",
+      formData
+    );
   }
 
-  registerMovement(data:any): Observable<CreatedResponse> {
+  registerMovement(data: any): Observable<CreatedResponse> {
     let headers = new HttpHeaders({
       "Content-Type": "application/json",
-      "Authorization": "Bearer "+this.loginService.getToken(),
+      Authorization: "Bearer " + this.loginService.getToken(),
     });
-    return this.http.post<CreatedResponse>(this.url + 'api/movimientos/movimiento', data ,{headers});
+    return this.http.post<CreatedResponse>(
+      this.url + "api/movimientos/movimiento",
+      data,
+      { headers }
+    );
   }
 
-  listHistory(page:number, dateFrom:string, dateTo:string): Observable<HistoryList> {
+  listHistory(
+    page: number,
+    dateFrom: string,
+    dateTo: string
+  ): Observable<HistoryList> {
     let headers = new HttpHeaders({
       "Content-Type": "application/json",
-      "Authorization": "Bearer "+this.loginService.getToken(),
+      Authorization: "Bearer " + this.loginService.getToken(),
     });
-    return this.http.get<HistoryList>(this.url + `api/movimientos/listar?page=${page}&dateFrom=${dateFrom}&dateTo=${dateTo}`,{headers})
+    return this.http.get<HistoryList>(
+      this.url +
+        `api/movimientos/listar?page=${page}&dateFrom=${dateFrom}&dateTo=${dateTo}`,
+      { headers }
+    );
   }
   getMovementByProviders(): Observable<ProviderQuantity[]> {
     let headers = new HttpHeaders({
       "Content-Type": "application/json",
-      "Authorization": "Bearer "+this.loginService.getToken(),
+      Authorization: "Bearer " + this.loginService.getToken(),
     });
-    return this.http.get<ProviderQuantity[]>(this.url + 'api/movimientos/dashboard', {headers});
+    return this.http.get<ProviderQuantity[]>(
+      this.url + "api/movimientos/dashboard",
+      { headers }
+    );
   }
 
-  deleteProduct(data: any):Observable<CreatedResponse> {
+  deleteProduct(data: any): Observable<CreatedResponse> {
     let headers = new HttpHeaders({
       "Content-Type": "application/json",
-      "Authorization": "Bearer "+this.loginService.getToken(),
-
-      });
-    return this.http.post<CreatedResponse>(this.url + 'api/productos/eliminar', data ,{headers});
+      Authorization: "Bearer " + this.loginService.getToken(),
+    });
+    return this.http.post<CreatedResponse>(
+      this.url + "api/productos/eliminar",
+      data,
+      { headers }
+    );
   }
 
   downloadReportPdf() {
     let headers = new HttpHeaders({
       "Content-Type": "application/json",
-      "Authorization": "Bearer "+this.loginService.getToken(),
-      });
-      return this.http.get(this.url + "api/productos/pdf", {
-        headers: headers,
-        responseType: 'blob'
-      });
+      Authorization: "Bearer " + this.loginService.getToken(),
+    });
+    return this.http.get(this.url + "api/productos/pdf", {
+      headers: headers,
+      responseType: "blob",
+    });
   }
 
   downloadReportMovementPdf() {
     let headers = new HttpHeaders({
       "Content-Type": "application/json",
-      "Authorization": "Bearer "+this.loginService.getToken(),
+      Authorization: "Bearer " + this.loginService.getToken(),
     });
     return this.http.get(this.url + "api/movimientos/pdf", {
       headers: headers,
-      responseType: 'blob'
+      responseType: "blob",
     });
   }
-
 }

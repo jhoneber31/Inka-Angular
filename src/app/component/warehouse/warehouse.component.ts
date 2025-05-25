@@ -26,6 +26,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
   public loading: boolean = true;
   public searchQuery: string = '';
   public title:string = "";
+  public loadingPDF: boolean = false;
 
   constructor(
     private router:Router,
@@ -100,6 +101,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
   }
 
   downloadPdf():void {
+    this.loadingPDF = true;
     this.productService.downloadReportPdf()
       .subscribe({
         next:(data) => {
@@ -111,6 +113,9 @@ export class WarehouseComponent implements OnInit, OnDestroy {
         },
         error: err => {
           console.log("ERROR AL DESCARGAR EL REPORTE: ", err)
+        },
+        complete: () => {
+          this.loadingPDF = false;
         }
       })
   }

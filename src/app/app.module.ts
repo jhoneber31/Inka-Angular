@@ -26,10 +26,11 @@ import { LoaderComponent } from './component/loader/loader.component';
 import { SearchPageComponent } from './component/search-page/search-page.component';
 import { HistoryInformationComponent } from './component/history-information/history-information.component';
 import { DeleteProductComponent } from './component/delete-product/delete-product.component';
+import { NotificationsComponent } from './component/notifications/notifications.component';
 
 @NgModule({
   declarations: [
-    AppComponent,routingComponents, NavbarComponent, WarehouseComponent, ModalComponent, ProductLayoutComponent, ChooseActionComponent, MovementTypeComponent, HistoryComponent, SidebarComponent, LoaderComponent, SearchPageComponent, HistoryInformationComponent, DeleteProductComponent,
+    AppComponent,routingComponents, NavbarComponent, WarehouseComponent, ModalComponent, ProductLayoutComponent, ChooseActionComponent, MovementTypeComponent, HistoryComponent, SidebarComponent, LoaderComponent, SearchPageComponent, HistoryInformationComponent, DeleteProductComponent, NotificationsComponent
   ],
   imports: [
     BrowserModule,

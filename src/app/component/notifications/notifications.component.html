@@ -1,0 +1,56 @@
+<button 
+  type="button" 
+  (click)="closeModal()"
+  class="absolute top-5 right-5"
+  >
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="25"
+    height="25"
+    fill="currentColor"
+    class="bi bi-x-circle"
+    viewBox="0 0 16 16"
+  >
+    <path
+      d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
+    />
+    <path
+      d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"
+    />
+  </svg>
+</button>
+<p class="font-bold text-base text-black mb-3">Los siguientes productos se encuentran en un estado crítico de stock.</p>
+<div class="w-full lg:w-[600px] lg:h-[500px] lg:overflow-auto">
+  <div *ngIf="loading" class="animate-pulse w-full">
+    <div class="w-full h-8 bg-slate-700"></div>
+    <div class="w-full mt-2 h-44 lg:h-[500px] bg-slate-700"></div>
+  </div>
+  <div *ngIf="!loading" class="overflow-x-auto">
+    <table class="table-auto min-w-max w-full" align="center" >
+      <thead class="bg-[#7D6F6F] text-white">
+        <tr align="center">
+          <th align="center" class="p-4">ID</th>
+          <th align="center" class="p-4">Producto</th>
+          <th align="center" class="p-4">Stock</th>
+        </tr>
+      </thead>
+      <tbody
+        class="bg-grey-light"
+      >
+        <tr *ngFor="let item of notification">
+          <td align="center" class="p-4">{{item.id}}</td>
+          <td align="center" class="p-4 whitespace-nowrap">
+            <div class="flex space-x-4">
+              <img class="w-20 h-20" src="{{item.imagen}}" alt="{{item.nombre}}">
+              <div class="flex flex-col justify-center space-x-1">
+                <h4 class="text-start">{{item.nombre}}</h4>
+                <span class="m-0">{{item.medida}}</span>
+              </div>
+            </div>
+          </td>
+          <td align="center" class="p-4">{{item.stock}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
